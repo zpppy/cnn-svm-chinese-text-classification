@@ -1,4 +1,4 @@
-# cnn-libsvm-chinese-text-classification
+# cnn-svm-chinese-text-classification
 本项目主要针对CNN和SVM在文本分类领域的效果做对比。采用搜狐语料库（https://pan.baidu.com/share/link?uk=3089318666&shareid=528982730&adapt=pc&fr=ftw）, 实验结果为：cnn的正确率为96.67%，libsvm的正确率为90%。
 
 
