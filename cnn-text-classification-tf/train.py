@@ -80,14 +80,7 @@ print("Train/Dev split: {:d}/{:d}".format(len(y_train), len(y_dev)))
 # ==================================================
 
 with tf.Graph().as_default():
-    gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.7)
-    session_conf = tf.ConfigProto(
-      allow_soft_placement=FLAGS.allow_soft_placement,  #是否打印设备分配日志
-      log_device_placement=FLAGS.log_device_placement,
-      gpu_options = gpu_options,
-
-    )  #如果你指定的设备不存在，允许TF自动分配设
-    sess = tf.Session(config=session_conf)
+   
     with sess.as_default():
         cnn = TextCNN(
             #sequence_length表示每个句子中词的个数，这里统一为max_document_length
@@ -105,16 +98,16 @@ with tf.Graph().as_default():
         optimizer = tf.train.AdamOptimizer(1e-3)
         #compute_gradients返回的是（梯度，变量）对
         grads_and_vars = optimizer.compute_gradients(cnn.loss)
-        #global_step记录参数更新了几次
+       
         train_op = optimizer.apply_gradients(grads_and_vars, global_step=global_step)
 
         # Keep track of gradient values and sparsity (optional)
         grad_summaries = []
         for g, v in grads_and_vars:
             if g is not None:
-                #如果是记录每个w,b的梯度变化，那么将有好多直方图？
+            
                 grad_hist_summary = tf.summary.histogram("{}/grad/hist".format(v.name), g)
-                #tf.nn.zero_fraction(g)：返回0在g中的比例
+                
                 sparsity_summary = tf.summary.scalar("{}/grad/sparsity".format(v.name), tf.nn.zero_fraction(g))
                 grad_summaries.append(grad_hist_summary)
                 grad_summaries.append(sparsity_summary)
@@ -146,7 +139,7 @@ with tf.Graph().as_default():
         checkpoint_prefix = os.path.join(checkpoint_dir, "model")
         if not os.path.exists(checkpoint_dir):
             os.makedirs(checkpoint_dir)
-        #创建模型的保存器   
+      
         saver = tf.train.Saver(tf.global_variables(), max_to_keep=FLAGS.num_checkpoints)
 
         # Write vocabulary
